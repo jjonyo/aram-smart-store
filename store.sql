@@ -403,3 +403,7 @@ VALUES (1, 1, '의류', 1, 'Y', '1', '1', NOW(), NOW());
 INSERT INTO category (`parent_id`, `store_id`, `name`, `level`, `use_yn`, `creator_id`,
                       `modifier_id`, `created_at`, `modified_at`)
 VALUES (1, 1, '음식', 1, 'Y', '1', '1', NOW(), NOW());
+
+INSERT INTO category (`parent_id`, `store_id`, `name`, `level`, `use_yn`, `creator_id`,
+                      `modifier_id`, `created_at`, `modified_at`)
+VALUES (3, 1, '상의', 2, 'Y', '1', '1', NOW(), NOW());
