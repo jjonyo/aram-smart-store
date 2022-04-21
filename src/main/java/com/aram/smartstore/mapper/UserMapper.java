@@ -4,6 +4,7 @@ import com.aram.smartstore.domain.UserEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface UserMapper {
@@ -13,4 +14,7 @@ public interface UserMapper {
           + "VALUES (#{username}, #{password}, #{name}, #{address}, #{phoneNumber}, #{state}, #{creatorId}, #{modifierId}, NOW(), NOW())")
   @Options(useGeneratedKeys = true, keyProperty = "id")
   void insert(UserEntity userEntity);
+
+  @Select("SELECT * FROM user WHERE username = #{username}")
+  UserEntity findByUsername(String username);
 }

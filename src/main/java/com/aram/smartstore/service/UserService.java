@@ -23,4 +23,18 @@ public class UserService {
     userMapper.insert(userEntity);
     return userEntity.getId();
   }
+
+  public Long loginUser(String username, String password) {
+    UserEntity userEntity = userMapper.findByUsername(username);
+
+    if (userEntity == null) {
+      throw new IllegalStateException("존재하지 않는 username");
+    }
+
+    if (!userEntity.getPassword().equals(password)) {
+      throw new IllegalStateException("일치하지 않는 password");
+    }
+
+    return userEntity.getId();
+  }
 }
