@@ -21,14 +21,14 @@ public class CategoryService {
       throw new IllegalStateException("존재하지 않는 카테고리 ID");
     }
 
-    return new CategoryResponseDto(category);
+    return CategoryResponseDto.of(category);
   }
 
   public List<CategoryResponseDto> findChildCategories(Long id) {
     List<CategoryEntity> categories = categoryMapper.findChildCategoriesById(id);
 
     return categories.stream()
-        .map(CategoryResponseDto::new)
+        .map(CategoryResponseDto::of)
         .collect(Collectors.toList());
   }
 

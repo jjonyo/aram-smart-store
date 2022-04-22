@@ -2,9 +2,13 @@ package com.aram.smartstore.controller.dto.response;
 
 import com.aram.smartstore.domain.CategoryEntity;
 import java.text.SimpleDateFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
+@Builder
 public class CategoryResponseDto {
 
   private final Long id;
@@ -18,18 +22,20 @@ public class CategoryResponseDto {
   private final String createdAt;
   private final String modifiedAt;
 
-  public CategoryResponseDto(CategoryEntity category) {
+  public static CategoryResponseDto of(CategoryEntity category) {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    this.id = category.getId();
-    this.parentId = category.getParentId();
-    this.storeId = category.getStoreId();
-    this.name = category.getName();
-    this.level = category.getLevel();
-    this.useYn = category.getUseYn();
-    this.creatorId = category.getCreatorId();
-    this.modifierId = category.getModifierId();
-    this.createdAt = formatter.format(category.getCreatedAt());
-    this.modifiedAt = formatter.format(category.getModifiedAt());
+    return CategoryResponseDto.builder()
+        .id(category.getId())
+        .parentId(category.getParentId())
+        .storeId(category.getStoreId())
+        .name(category.getName())
+        .level(category.getLevel())
+        .useYn(category.getUseYn())
+        .creatorId(category.getCreatorId())
+        .modifierId(category.getModifierId())
+        .createdAt(formatter.format(category.getCreatedAt()))
+        .modifiedAt(formatter.format(category.getModifiedAt()))
+        .build();
   }
 }
