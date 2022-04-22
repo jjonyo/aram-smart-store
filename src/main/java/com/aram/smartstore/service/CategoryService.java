@@ -15,12 +15,11 @@ public class CategoryService {
   private final CategoryMapper categoryMapper;
 
   public CategoryResponseDto findCategory(Long id) {
-    CategoryEntity category = categoryMapper.findById(id);
-
-    if (category == null) {
-      throw new IllegalStateException("존재하지 않는 카테고리 ID");
-    }
-
+    CategoryEntity category = categoryMapper.findById(id)
+        .orElseThrow(() -> {
+          throw new IllegalStateException("존재하지 않는 카테고리 ID 입니다.");
+        });
+    
     return CategoryResponseDto.of(category);
   }
 
