@@ -10,24 +10,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
 public class UserController {
 
   private final UserService userService;
 
-  @PostMapping("/signup")
+  @PostMapping("/auth/signup")
   public ResponseEntity<Long> signUp(@RequestBody SaveUserRequestDto saveUserRequestDto) {
     Long savedId = userService.saveUser(saveUserRequestDto);
 
     return new ResponseEntity<>(savedId, HttpStatus.OK);
   }
 
-  @PostMapping("/login")
+  @PostMapping("/auth/login")
   public ResponseEntity<?> login(@RequestBody LoginUserRequestDto loginUserRequestDto,
       HttpServletResponse response) {
     Long userId = userService.loginUser(loginUserRequestDto.getUsername(),
