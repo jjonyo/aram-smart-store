@@ -18,14 +18,14 @@ public class CategoryController {
 
   @GetMapping("/category/{id}")
   public ResponseEntity<CategoryResponseDto> getCategoryById(@PathVariable Long id) {
-    CategoryResponseDto result = categoryService.findById(id);
+    CategoryResponseDto result = categoryService.findCategory(id);
 
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
   @GetMapping("/categories/{id}/child")
   public ResponseEntity<List<CategoryResponseDto>> getChildCategories(@PathVariable Long id) {
-    List<CategoryResponseDto> result = categoryService.getChildCategoriesById(id);
+    List<CategoryResponseDto> result = categoryService.findChildCategories(id);
 
     return new ResponseEntity<>(result, HttpStatus.OK);
   }

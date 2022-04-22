@@ -14,7 +14,7 @@ public class CategoryService {
 
   private final CategoryMapper categoryMapper;
 
-  public CategoryResponseDto findById(Long id) {
+  public CategoryResponseDto findCategory(Long id) {
     CategoryEntity category = categoryMapper.findById(id);
 
     if (category == null) {
@@ -24,7 +24,7 @@ public class CategoryService {
     return new CategoryResponseDto(category);
   }
 
-  public List<CategoryResponseDto> getChildCategoriesById(Long id) {
+  public List<CategoryResponseDto> findChildCategories(Long id) {
     List<CategoryEntity> categories = categoryMapper.findChildCategoriesById(id);
 
     return categories.stream()
