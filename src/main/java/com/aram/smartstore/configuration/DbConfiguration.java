@@ -3,6 +3,7 @@ package com.aram.smartstore.configuration;
 import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.LocalDateTypeHandler;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,6 +53,7 @@ public class DbConfiguration {
 
     org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
     configuration.setMapUnderscoreToCamelCase(true);
+    configuration.setDefaultEnumTypeHandler(LocalDateTypeHandler.class);
     factoryBean.setConfiguration(configuration);
 
     factoryBean.setTypeAliasesPackage("com.**.domain");

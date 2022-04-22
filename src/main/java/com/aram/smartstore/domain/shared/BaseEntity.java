@@ -1,6 +1,6 @@
 package com.aram.smartstore.domain.shared;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +15,6 @@ public abstract class BaseEntity {
   private String creatorId;
   @Setter
   private String modifierId;
-  private Timestamp createdAt;
-  private Timestamp modifiedAt;
+  private LocalDateTime createdAt;
+  private LocalDateTime modifiedAt;
 }

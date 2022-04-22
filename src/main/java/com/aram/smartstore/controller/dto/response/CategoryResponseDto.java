@@ -1,10 +1,13 @@
 package com.aram.smartstore.controller.dto.response;
 
 import com.aram.smartstore.domain.CategoryEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @AllArgsConstructor
@@ -19,11 +22,12 @@ public class CategoryResponseDto {
   private final String useYn;
   private final String creatorId;
   private final String modifierId;
-  private final String createdAt;
-  private final String modifiedAt;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+  private final LocalDateTime createdAt;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+  private final LocalDateTime modifiedAt;
 
   public static CategoryResponseDto of(CategoryEntity category) {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     return CategoryResponseDto.builder()
         .id(category.getId())
@@ -34,8 +38,8 @@ public class CategoryResponseDto {
         .useYn(category.getUseYn())
         .creatorId(category.getCreatorId())
         .modifierId(category.getModifierId())
-        .createdAt(formatter.format(category.getCreatedAt()))
-        .modifiedAt(formatter.format(category.getModifiedAt()))
+        .createdAt(category.getCreatedAt())
+        .modifiedAt(category.getModifiedAt())
         .build();
   }
 }

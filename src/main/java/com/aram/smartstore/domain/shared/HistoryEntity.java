@@ -1,6 +1,6 @@
 package com.aram.smartstore.domain.shared;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public abstract class HistoryEntity {
 
   private String creatorId;
-  private Timestamp createdAt;
+  private LocalDateTime createdAt;
 }
