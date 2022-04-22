@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
+  private final String LOGIN_TOKEN_NAME = "login-token";
+  private final String LOGIN_SUCCESS_MESSAGE = "Login Success";
 
   @PostMapping("/auth/signup")
   public ResponseEntity<Long> signUp(@RequestBody SaveUserRequestDto saveUserRequestDto) {
@@ -31,10 +33,10 @@ public class UserController {
     Long userId = userService.loginUser(loginUserRequestDto.getUsername(),
         loginUserRequestDto.getPassword());
 
-    Cookie cookie = new Cookie("login-token", userId.toString());
+    Cookie cookie = new Cookie(LOGIN_TOKEN_NAME, userId.toString());
     cookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
     response.addCookie(cookie);
 
-    return new ResponseEntity<>("Login SUCCESS", HttpStatus.OK);
+    return new ResponseEntity<>(LOGIN_SUCCESS_MESSAGE, HttpStatus.OK);
   }
 }

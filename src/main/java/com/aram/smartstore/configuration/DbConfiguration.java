@@ -45,7 +45,8 @@ public class DbConfiguration {
   }
 
   @Bean
-  public SqlSessionFactory sqlSessionFactory(DataSource dataSource, ApplicationContext applicationContext) throws Exception {
+  public SqlSessionFactory sqlSessionFactory(DataSource dataSource,
+      ApplicationContext applicationContext) throws Exception {
     SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
     factoryBean.setDataSource(dataSource);
 
@@ -53,8 +54,9 @@ public class DbConfiguration {
     configuration.setMapUnderscoreToCamelCase(true);
     factoryBean.setConfiguration(configuration);
 
-//        factoryBean.setTypeAliasesPackage("com.**.dto");
-//        factoryBean.setMapperLocations(applicationContext.getResources("classpath:com/**/mapper/*.xml"));
+    factoryBean.setTypeAliasesPackage("com.**.domain");
+    factoryBean.setMapperLocations(
+        applicationContext.getResources("classpath:com/**/mapper/*.xml"));
     return factoryBean.getObject();
   }
 
