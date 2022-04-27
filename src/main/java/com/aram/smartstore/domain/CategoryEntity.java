@@ -1,7 +1,6 @@
 package com.aram.smartstore.domain;
 
 import com.aram.smartstore.domain.shared.BaseEntity;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class CategoryEntity extends BaseEntity {
 
