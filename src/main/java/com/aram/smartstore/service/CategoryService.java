@@ -17,9 +17,9 @@ public class CategoryService {
   public CategoryResponseDto findCategory(Long id) {
     CategoryEntity category = categoryMapper.findById(id)
         .orElseThrow(() -> {
-          throw new IllegalStateException("존재하지 않는 카테고리 ID 입니다.");
+          throw new IllegalArgumentException("존재하지 않는 카테고리 ID 입니다.");
         });
-    
+
     return CategoryResponseDto.of(category);
   }
 
