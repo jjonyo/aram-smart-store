@@ -16,14 +16,14 @@ public class CategoryController {
 
   private final CategoryService categoryService;
 
-  @GetMapping("/category/{id}")
-  public ResponseEntity<CategoryResponseDto> getCategoryById(@PathVariable Long id) {
-    CategoryResponseDto result = categoryService.findCategory(id);
+  @GetMapping("/categories/{id}")
+  public ResponseEntity<CategoryResponseDto> getCategoriesById(@PathVariable Long id) {
+    CategoryResponseDto result = categoryService.findCategories(id);
 
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
-  @GetMapping("/categories/{id}/child")
+  @GetMapping("/categories/{id}/children")
   public ResponseEntity<List<CategoryResponseDto>> getChildCategories(@PathVariable Long id) {
     List<CategoryResponseDto> result = categoryService.findChildCategories(id);
 

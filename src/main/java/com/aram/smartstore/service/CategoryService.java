@@ -14,19 +14,19 @@ public class CategoryService {
 
   private final CategoryMapper categoryMapper;
 
-  public CategoryResponseDto findCategory(Long id) {
-    CategoryEntity category = categoryMapper.findById(id)
+  public CategoryResponseDto findCategories(Long id) {
+    CategoryEntity categories = categoryMapper.findById(id)
         .orElseThrow(() -> {
           throw new IllegalArgumentException("존재하지 않는 카테고리 ID 입니다.");
         });
 
-    return CategoryResponseDto.of(category);
+    return CategoryResponseDto.of(categories);
   }
 
   public List<CategoryResponseDto> findChildCategories(Long id) {
-    List<CategoryEntity> categories = categoryMapper.findChildCategoriesById(id);
+    List<CategoryEntity> categoriesList = categoryMapper.findChildCategoriesById(id);
 
-    return categories.stream()
+    return categoriesList.stream()
         .map(CategoryResponseDto::of)
         .collect(Collectors.toList());
   }
