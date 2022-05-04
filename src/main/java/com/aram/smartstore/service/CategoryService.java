@@ -3,6 +3,7 @@ package com.aram.smartstore.service;
 import com.aram.smartstore.controller.dto.response.CategoryResponseDto;
 import com.aram.smartstore.domain.CategoryEntity;
 import com.aram.smartstore.mapper.CategoryMapper;
+import com.aram.smartstore.mapper.StoreMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +14,14 @@ import org.springframework.stereotype.Service;
 public class CategoryService {
 
   private final CategoryMapper categoryMapper;
+  private final StoreMapper storeMapper;
+  private final UserService userService;
+  private final StoreMemberService storeMemberService;
 
   public CategoryResponseDto findCategories(Long id) {
     CategoryEntity categories = categoryMapper.findById(id)
         .orElseThrow(() -> {
-          throw new IllegalArgumentException("존재하지 않는 카테고리 ID 입니다.");
+          throw new IllegalArgumentException("존재하지 않는 카테고리 id 입니다.");
         });
 
     return CategoryResponseDto.of(categories);
@@ -29,6 +33,57 @@ public class CategoryService {
     return categoriesList.stream()
         .map(CategoryResponseDto::of)
         .collect(Collectors.toList());
+  }
+
+  public CategoryEntity findCategoryEntity(Long id) {
+    return categoryMapper.findById(id)
+        .orElseThrow(() -> {
+          throw new IllegalArgumentException("존재하지 않는 카테고리 id 입니다.");
+        });
+  }
+
+  public Long saveCategory(Long userId, Long parentId, Long storeId, String name) {
+    //유저 조회
+    userService.findUser(userId);
+
+    //스토어 조회
+    storeMapper.findById(storeId)
+        .orElseThrow(() -> {
+          throw new IllegalArgumentException("존재하지 않는 스토어 id 입니다.");
+        });
+
+    //스토어 멤버 조회
+    storeMemberService.findStoreMember(storeId, userId);
+
+    //카테고리 조회
+    CategoryEntity parentCategory = findCategoryEntity(parentId);
+
+    CategoryEntity category = CategoryEntity.builder()
+        .name(name)
+        .storeId(storeId)
+        .parentId(parentId)
+        .level(parentCategory.getLevel() + 1)
+        .useYn("Y")
+        .build();
+    category.setCreatorId(userId.toString());
+    category.setModifierId(userId.toString());
+    categoryMapper.insert(category);
+
+    return category.getId();
+  }
+
+  public Long saveRootCategory(Long userId, Long storeId) {
+    CategoryEntity categoryEntity = CategoryEntity.builder()
+        .storeId(storeId)
+        .name("ROOT")
+        .level(0)
+        .useYn("Y")
+        .build();
+    categoryEntity.setCreatorId(userId.toString());
+    categoryEntity.setModifierId(userId.toString());
+    categoryMapper.insert(categoryEntity);
+
+    return categoryEntity.getId();
   }
 
 }

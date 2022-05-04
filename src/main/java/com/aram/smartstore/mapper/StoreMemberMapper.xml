@@ -10,4 +10,10 @@
     VALUES (#{storeId}, #{userId}, #{type}, #{creatorId}, #{modifierId}, NOW(), NOW())
   </insert>
 
+  <select id="findStoreMember" parameterType="Long" resultType="StoreMemberEntity">
+    SELECT *
+    FROM store_member
+    WHERE store_id = #{storeId}
+      AND user_id = #{userId}
+  </select>
 </mapper>

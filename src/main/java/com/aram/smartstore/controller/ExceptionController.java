@@ -10,15 +10,13 @@ public class ExceptionController {
 
   @ExceptionHandler({IllegalArgumentException.class})
   public ResponseEntity<?> illegalArgumentException(final IllegalArgumentException ex) {
-    //TODO : logging
-
+    ex.printStackTrace();
     return new ResponseEntity<>("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler({RuntimeException.class})
   public ResponseEntity<?> runTimeException(final RuntimeException ex) {
-    //TODO : logging
-
+    ex.printStackTrace();
     return new ResponseEntity<>("서버 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
   }
 

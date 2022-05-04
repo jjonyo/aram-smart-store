@@ -1,12 +1,7 @@
 package com.aram.smartstore.service;
 
-import com.aram.smartstore.domain.CategoryEntity;
 import com.aram.smartstore.domain.StoreEntity;
-import com.aram.smartstore.domain.StoreMemberEntity;
-import com.aram.smartstore.mapper.CategoryMapper;
 import com.aram.smartstore.mapper.StoreMapper;
-import com.aram.smartstore.mapper.StoreMemberMapper;
-import com.aram.smartstore.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class StoreService {
 
   private final UserService userService;
+  private final StoreMemberService storeMemberService;
+  private final CategoryService categoryService;
   private final StoreMapper storeMapper;
-  private final StoreMemberMapper storeMemberMapper;
-  private final CategoryMapper categoryMapper;
+
+  public StoreEntity findStore(Long id) {
+    return storeMapper.findById(id)
+        .orElseThrow(() -> {
+          throw new IllegalArgumentException("존재하지 않는 스토어 id 입니다.");
+        });
+  }
 
   @Transactional
   public Long saveStore(Long userId, String name, String description) {
@@ -29,35 +31,12 @@ public class StoreService {
     StoreEntity storeEntity = createStore(userId, name, description);
 
     //스토어 멤버 추가
-    initStoreMember(userId, storeEntity.getId());
+    storeMemberService.saveStoreMember(userId, storeEntity.getId(), "MANAGER");
 
     //ROOT카테고리 추가
-    initRootCategory(userId, storeEntity.getId());
+    categoryService.saveRootCategory(userId, storeEntity.getId());
 
     return storeEntity.getId();
-  }
-
-  private void initRootCategory(Long userId, Long storeId) {
-    CategoryEntity categoryEntity = CategoryEntity.builder()
-        .storeId(storeId)
-        .name("ROOT")
-        .level(0)
-        .useYn("Y")
-        .build();
-    categoryEntity.setCreatorId(userId.toString());
-    categoryEntity.setModifierId(userId.toString());
-    categoryMapper.insert(categoryEntity);
-  }
-
-  private void initStoreMember(Long userId, Long storeId) {
-    StoreMemberEntity storeMemberEntity = StoreMemberEntity.builder()
-        .userId(userId)
-        .storeId(storeId)
-        .type("MANAGER")
-        .build();
-    storeMemberEntity.setCreatorId(userId.toString());
-    storeMemberEntity.setModifierId(userId.toString());
-    storeMemberMapper.insert(storeMemberEntity);
   }
 
   private StoreEntity createStore(Long userId, String name, String description) {
