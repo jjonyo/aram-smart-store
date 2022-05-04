@@ -29,8 +29,8 @@ public class CategoryEntity extends BaseEntity {
       throw new IllegalArgumentException("같은 스토어의 카테고리로만 변경이 가능합니다.");
     }
 
-    if (parentCategory.getLevel() + 1 > 3) {
-      throw new IllegalArgumentException("카테고리의 레벨은 4 이상이 될 수 없습니다.");
+    if (parentCategory.getLevel() + 1 > 4) {
+      throw new IllegalArgumentException("카테고리의 레벨은 5 이상이 될 수 없습니다.");
     }
 
     this.parentId = parentCategory.getId();
