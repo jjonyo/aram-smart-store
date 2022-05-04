@@ -1,9 +1,6 @@
 package com.aram.smartstore.configuration;
 
-import com.fasterxml.jackson.core.JsonParser.Feature;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.SimpleTimeZone;
@@ -26,17 +23,10 @@ public class WebConfiguration implements WebMvcConfigurer {
   public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
     Jackson2ObjectMapperFactoryBean jackson2ObjectMapperFactoryBean = new Jackson2ObjectMapperFactoryBean();
 
-    jackson2ObjectMapperFactoryBean.setFailOnEmptyBeans(true);
     jackson2ObjectMapperFactoryBean.setIndentOutput(true);
-    jackson2ObjectMapperFactoryBean.setFeaturesToDisable(
-        DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    jackson2ObjectMapperFactoryBean.setFeaturesToEnable(Feature.ALLOW_COMMENTS,
-        Feature.ALLOW_SINGLE_QUOTES, DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-
-    jackson2ObjectMapperFactoryBean.setDateFormat(new SimpleDateFormat(dateTimeFormat));
+    jackson2ObjectMapperFactoryBean.setTimeZone(SimpleTimeZone.getTimeZone("UTC"));
     jackson2ObjectMapperFactoryBean.setSerializers(new LocalDateTimeSerializer(
         DateTimeFormatter.ofPattern(dateTimeFormat)));
-    jackson2ObjectMapperFactoryBean.setTimeZone(SimpleTimeZone.getTimeZone("UTC"));
 
     jackson2ObjectMapperFactoryBean.afterPropertiesSet();
 
