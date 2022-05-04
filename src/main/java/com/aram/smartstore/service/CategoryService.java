@@ -108,7 +108,30 @@ public class CategoryService {
       CategoryEntity parentCategory = findCategoryEntity(parentId);
       categoryEntity.updateParentCategory(parentCategory);
     }
-    
+
+    categoryEntity.setModifierId(userId.toString());
+    categoryMapper.update(categoryEntity);
+
+    return categoryEntity.getId();
+  }
+
+  public Long deleteCategory(Long categoryId, Long userId) {
+    //카테고리 조회
+    CategoryEntity categoryEntity = findCategoryEntity(categoryId);
+
+    //스토어멤버 조회
+    Long storeId = categoryEntity.getStoreId();
+    storeMemberService.findStoreMember(storeId, userId);
+
+    //하위카테고리 조회
+    List<CategoryResponseDto> childCategories = findChildCategories(categoryId);
+    if (!childCategories.isEmpty()) {
+      throw new IllegalArgumentException("하위 카테고리가 존재하기때문에 삭제할 수 없습니다.");
+    }
+
+    //카테고리 삭제
+    categoryEntity.updateUseYn("N");
+
     categoryEntity.setModifierId(userId.toString());
     categoryMapper.update(categoryEntity);
 

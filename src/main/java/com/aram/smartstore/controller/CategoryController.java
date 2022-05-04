@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,5 +57,14 @@ public class CategoryController {
     Long updatedId = categoryService.updateCategory(categoryId, userId, updateCategoryRequestDto);
 
     return new ResponseEntity<>(updatedId, HttpStatus.OK);
+  }
+
+  @DeleteMapping("/category/{id}")
+  public ResponseEntity<Long> deleteCategory(@PathVariable("id") Long categoryId,
+      @CookieValue("login-token") Long userId) {
+
+    Long deletedId = categoryService.deleteCategory(categoryId, userId);
+    
+    return new ResponseEntity<>(deletedId, HttpStatus.OK);
   }
 }
