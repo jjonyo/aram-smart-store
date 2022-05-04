@@ -2,7 +2,14 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aram.smartstore.mapper.CategoryMapper">
-  
+
+  <insert id="insert" parameterType="CategoryEntity" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO category (parent_id, store_id, name, level, use_yn, creator_id, modifier_id,
+                          created_at, modified_at)
+    VALUES (#{parentId}, #{storeId}, #{name}, #{level}, #{useYn}, #{creatorId}, #{modifierId},
+            NOW(), NOW())
+  </insert>
+
   <select id="findById" resultType="CategoryEntity">
     SELECT *
     FROM category

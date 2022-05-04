@@ -16,4 +16,10 @@
     WHERE username = #{username}
   </select>
 
+  <select id="findById" parameterType="Long" resultType="UserEntity">
+    SELECT *
+    FROM user
+    WHERE id = #{id}
+  </select>
+  
 </mapper>

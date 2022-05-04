@@ -35,4 +35,11 @@ public class UserService {
 
     return userEntity.getId();
   }
+
+  public UserEntity findUser(Long id) {
+    return userMapper.findById(id)
+        .orElseThrow(() -> {
+          throw new IllegalArgumentException("존재하지 않는 유저 id 입니다.");
+        });
+  }
 }

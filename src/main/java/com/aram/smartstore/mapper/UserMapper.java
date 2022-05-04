@@ -10,4 +10,6 @@ public interface UserMapper {
   void insert(UserEntity userEntity);
 
   Optional<UserEntity> findByUsername(String username);
+
+  Optional<UserEntity> findById(Long id);
 }
