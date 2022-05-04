@@ -2,9 +2,12 @@ package com.aram.smartstore.service;
 
 import com.aram.smartstore.controller.dto.request.UpdateCategoryRequestDto;
 import com.aram.smartstore.controller.dto.response.CategoryResponseDto;
+import com.aram.smartstore.controller.dto.response.ProductResponseDto;
 import com.aram.smartstore.domain.CategoryEntity;
+import com.aram.smartstore.domain.ProductEntity;
 import com.aram.smartstore.mapper.CategoryMapper;
 import com.aram.smartstore.mapper.StoreMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -100,7 +103,7 @@ public class CategoryService {
     if (updateCategoryRequestDto.getName() != null) {
       categoryEntity.updateName(updateCategoryRequestDto.getName());
     }
-    
+
     categoryEntity.setModifierId(userId.toString());
     categoryMapper.update(categoryEntity);
 
@@ -130,4 +133,30 @@ public class CategoryService {
     return categoryEntity.getId();
   }
 
+  public List<ProductResponseDto> findProductsByCategories(Long categoryId) {
+    //모든 하위 카테고리 id 가져오기
+    List<Long> categoryIdList = new ArrayList<>();
+    categoryIdList.add(categoryId);
+    getChildCategoryId(categoryId, categoryIdList);
+
+    List<ProductEntity> productsByCategories = categoryMapper.findProductsByCategories(
+        categoryIdList);
+
+    return productsByCategories.stream()
+        .map(ProductResponseDto::of)
+        .collect(Collectors.toList());
+  }
+
+  private void getChildCategoryId(Long categoryId, List<Long> categoryIdList) {
+    List<Long> childCategoryIdList = categoryMapper.findChildCategoriesById(categoryId)
+        .stream()
+        .map(CategoryEntity::getId)
+        .collect(Collectors.toList());
+
+    categoryIdList.addAll(childCategoryIdList);
+
+    for (Long id : childCategoryIdList) {
+      getChildCategoryId(id, categoryIdList);
+    }
+  }
 }

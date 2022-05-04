@@ -3,6 +3,7 @@ package com.aram.smartstore.controller;
 import com.aram.smartstore.controller.dto.request.SaveCategoryRequestDto;
 import com.aram.smartstore.controller.dto.request.UpdateCategoryRequestDto;
 import com.aram.smartstore.controller.dto.response.CategoryResponseDto;
+import com.aram.smartstore.controller.dto.response.ProductResponseDto;
 import com.aram.smartstore.service.CategoryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +65,16 @@ public class CategoryController {
       @CookieValue("login-token") Long userId) {
 
     Long deletedId = categoryService.deleteCategory(categoryId, userId);
-    
+
     return new ResponseEntity<>(deletedId, HttpStatus.OK);
+  }
+
+  @GetMapping("/categories/{id}/products")
+  public ResponseEntity<List<ProductResponseDto>> getProductsByCategories(
+      @PathVariable("id") Long categoryId) {
+    List<ProductResponseDto> products = categoryService.findProductsByCategories(
+        categoryId);
+
+    return new ResponseEntity<>(products, HttpStatus.OK);
   }
 }

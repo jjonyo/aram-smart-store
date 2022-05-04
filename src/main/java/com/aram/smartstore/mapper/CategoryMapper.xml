@@ -37,4 +37,13 @@
     WHERE id = #{id}
   </update>
 
+  <select id="findProductsByCategories" parameterType="List" resultType="ProductEntity">
+    SELECT *
+    FROM product
+    WHERE category_id IN
+    <foreach collection="list" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </select>
+
 </mapper>

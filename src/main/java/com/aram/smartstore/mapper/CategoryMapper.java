@@ -1,6 +1,7 @@
 package com.aram.smartstore.mapper;
 
 import com.aram.smartstore.domain.CategoryEntity;
+import com.aram.smartstore.domain.ProductEntity;
 import java.util.List;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,4 +16,6 @@ public interface CategoryMapper {
   List<CategoryEntity> findChildCategoriesById(Long id);
 
   void update(CategoryEntity categoryEntity);
+
+  List<ProductEntity> findProductsByCategories(List<Long> categoryIdList);
 }
