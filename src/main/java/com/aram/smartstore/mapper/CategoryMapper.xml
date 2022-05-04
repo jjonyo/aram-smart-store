@@ -23,4 +23,18 @@
       AND use_yn = 'Y'
   </select>
 
+  <update id="update" parameterType="CategoryEntity">
+    UPDATE category
+    SET parent_id   = #{parentId},
+        store_id    = #{storeId},
+        name        = #{name},
+        level       = #{level},
+        use_yn      = #{useYn},
+        creator_id  = #{creatorId},
+        modifier_id = #{modifierId},
+        created_at  = #{createdAt},
+        modified_at = NOW()
+    WHERE id = #{id}
+  </update>
+
 </mapper>

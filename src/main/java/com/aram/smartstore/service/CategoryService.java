@@ -1,5 +1,6 @@
 package com.aram.smartstore.service;
 
+import com.aram.smartstore.controller.dto.request.UpdateCategoryRequestDto;
 import com.aram.smartstore.controller.dto.response.CategoryResponseDto;
 import com.aram.smartstore.domain.CategoryEntity;
 import com.aram.smartstore.mapper.CategoryMapper;
@@ -82,6 +83,34 @@ public class CategoryService {
     categoryEntity.setCreatorId(userId.toString());
     categoryEntity.setModifierId(userId.toString());
     categoryMapper.insert(categoryEntity);
+
+    return categoryEntity.getId();
+  }
+
+  public Long updateCategory(Long categoryId, Long userId,
+      UpdateCategoryRequestDto updateCategoryRequestDto) {
+    //카테고리 조회
+    CategoryEntity categoryEntity = findCategoryEntity(categoryId);
+
+    //스토어멤버 조회
+    Long storeId = categoryEntity.getStoreId();
+    storeMemberService.findStoreMember(storeId, userId);
+
+    //변경값 세팅
+    if (updateCategoryRequestDto.getName() != null) {
+      categoryEntity.updateName(updateCategoryRequestDto.getName());
+    }
+
+    //부모 카테고리 변경
+    if (updateCategoryRequestDto.getParentId() != null) {
+      Long parentId = updateCategoryRequestDto.getParentId();
+
+      CategoryEntity parentCategory = findCategoryEntity(parentId);
+      categoryEntity.updateParentCategory(parentCategory);
+    }
+    
+    categoryEntity.setModifierId(userId.toString());
+    categoryMapper.update(categoryEntity);
 
     return categoryEntity.getId();
   }

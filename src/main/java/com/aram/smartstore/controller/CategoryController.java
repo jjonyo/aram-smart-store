@@ -1,6 +1,7 @@
 package com.aram.smartstore.controller;
 
 import com.aram.smartstore.controller.dto.request.SaveCategoryRequestDto;
+import com.aram.smartstore.controller.dto.request.UpdateCategoryRequestDto;
 import com.aram.smartstore.controller.dto.response.CategoryResponseDto;
 import com.aram.smartstore.service.CategoryService;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,5 +46,15 @@ public class CategoryController {
         saveCategoryRequestDto.getStoreId(), saveCategoryRequestDto.getName());
 
     return new ResponseEntity<>(categoryId, HttpStatus.OK);
+  }
+
+  @PatchMapping("/category/{id}")
+  public ResponseEntity<Long> updateCategory(@PathVariable("id") Long categoryId,
+      @CookieValue("login-token") Long userId,
+      @RequestBody UpdateCategoryRequestDto updateCategoryRequestDto) {
+
+    Long updatedId = categoryService.updateCategory(categoryId, userId, updateCategoryRequestDto);
+
+    return new ResponseEntity<>(updatedId, HttpStatus.OK);
   }
 }

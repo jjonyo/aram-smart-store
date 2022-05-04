@@ -13,4 +13,6 @@ public interface CategoryMapper {
   Optional<CategoryEntity> findById(Long id);
 
   List<CategoryEntity> findChildCategoriesById(Long id);
+
+  void update(CategoryEntity categoryEntity);
 }
