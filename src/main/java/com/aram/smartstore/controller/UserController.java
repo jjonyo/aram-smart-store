@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
-  private final String LOGIN_TOKEN_NAME = "login-token";
-  private final String LOGIN_SUCCESS_MESSAGE = "Login Success";
+  private static final String LOGIN_TOKEN_NAME = "login-token";
+  private static final String LOGIN_SUCCESS_MESSAGE = "Login Success";
 
   @PostMapping("/auth/signup")
   public ResponseEntity<Long> signUp(@RequestBody SaveUserRequestDto saveUserRequestDto) {
