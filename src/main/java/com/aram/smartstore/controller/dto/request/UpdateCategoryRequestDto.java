@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class UpdateCategoryRequestDto {
 
   private String name;
-  private Long parentId;
 }

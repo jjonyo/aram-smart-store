@@ -100,15 +100,7 @@ public class CategoryService {
     if (updateCategoryRequestDto.getName() != null) {
       categoryEntity.updateName(updateCategoryRequestDto.getName());
     }
-
-    //부모 카테고리 변경
-    if (updateCategoryRequestDto.getParentId() != null) {
-      Long parentId = updateCategoryRequestDto.getParentId();
-
-      CategoryEntity parentCategory = findCategoryEntity(parentId);
-      categoryEntity.updateParentCategory(parentCategory);
-    }
-
+    
     categoryEntity.setModifierId(userId.toString());
     categoryMapper.update(categoryEntity);
 
