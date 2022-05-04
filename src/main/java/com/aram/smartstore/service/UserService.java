@@ -2,7 +2,6 @@ package com.aram.smartstore.service;
 
 import com.aram.smartstore.controller.dto.request.SaveUserRequestDto;
 import com.aram.smartstore.domain.UserEntity;
-import com.aram.smartstore.domain.state.UserState;
 import com.aram.smartstore.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ public class UserService {
   public Long saveUser(SaveUserRequestDto saveUserRequestDto) {
     UserEntity userEntity = saveUserRequestDto.toEntity();
 
-    userEntity.setState(UserState.NORMAL);
+    userEntity.setState("NORMAL");
     userEntity.setCreatorId("SYSTEM");
     userEntity.setModifierId("SYSTEM");
 

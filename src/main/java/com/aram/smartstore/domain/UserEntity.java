@@ -1,7 +1,6 @@
 package com.aram.smartstore.domain;
 
 import com.aram.smartstore.domain.shared.BaseEntity;
-import com.aram.smartstore.domain.state.UserState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,5 +20,5 @@ public class UserEntity extends BaseEntity {
   private String address;
   private String phoneNumber;
   @Setter
-  private UserState state;
+  private String state;
 }
