@@ -1,0 +1,19 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aram.smartstore.store.mapper.StoreMemberMapper">
+
+  <insert id="insert" parameterType="StoreMember" useGeneratedKeys="true"
+    keyProperty="id">
+    INSERT INTO store_member (store_id, user_id, type, creator_id, modifier_id, created_at,
+    modified_at)
+    VALUES (#{storeId}, #{userId}, #{type}, #{creatorId}, #{modifierId}, NOW(), NOW())
+  </insert>
+
+  <select id="findStoreMember" parameterType="Long" resultType="StoreMember">
+    SELECT *
+    FROM store_member
+    WHERE store_id = #{storeId}
+    AND user_id = #{userId}
+  </select>
+</mapper>
