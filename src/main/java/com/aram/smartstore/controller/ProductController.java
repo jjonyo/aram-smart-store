@@ -23,7 +23,7 @@ public class ProductController {
   ) {
 
     Long savedId = productService.saveProduct(userId, saveProductRequestDto);
-    
+
     return new ResponseEntity<>(savedId, HttpStatus.OK);
   }
 }

@@ -1,6 +1,6 @@
 package com.aram.smartstore.controller.dto.response;
 
-import com.aram.smartstore.domain.ProductEntity;
+import com.aram.smartstore.domain.Product;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,22 +17,23 @@ public class ProductResponseDto {
   private Integer price;
   private Integer quantity;
   private String description;
-  private String deleteYn;
   private String creatorId;
   private String modifierId;
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;
 
-  public static ProductResponseDto of(ProductEntity productEntity) {
+  public static ProductResponseDto of(Product product) {
     return ProductResponseDto.builder()
-        .id(productEntity.getId())
-        .name(productEntity.getName())
-        .categoryId(productEntity.getCategoryId())
-        .price(productEntity.getPrice())
-        .quantity(productEntity.getQuantity())
-        .description(productEntity.getDescription())
-        .createdAt(productEntity.getCreatedAt())
-        .modifiedAt(productEntity.getModifiedAt())
+        .id(product.getId())
+        .name(product.getName())
+        .categoryId(product.getCategoryId())
+        .price(product.getPrice())
+        .quantity(product.getQuantity())
+        .description(product.getDescription())
+        .creatorId(product.getCreatorId())
+        .modifierId(product.getModifierId())
+        .createdAt(product.getCreatedAt())
+        .modifiedAt(product.getModifiedAt())
         .build();
   }
 }

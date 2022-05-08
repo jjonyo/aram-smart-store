@@ -1,7 +1,7 @@
 package com.aram.smartstore.service;
 
 import com.aram.smartstore.controller.dto.request.SaveUserRequestDto;
-import com.aram.smartstore.domain.UserEntity;
+import com.aram.smartstore.domain.User;
 import com.aram.smartstore.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,30 +13,30 @@ public class UserService {
   private final UserMapper userMapper;
 
   public Long saveUser(SaveUserRequestDto saveUserRequestDto) {
-    UserEntity userEntity = saveUserRequestDto.toEntity();
+    User user = saveUserRequestDto.toUser();
 
-    userEntity.setState("NORMAL");
-    userEntity.setCreatorId("SYSTEM");
-    userEntity.setModifierId("SYSTEM");
+    user.setState("NORMAL");
+    user.setCreatorId("SYSTEM");
+    user.setModifierId("SYSTEM");
 
-    userMapper.insert(userEntity);
-    return userEntity.getId();
+    userMapper.insert(user);
+    return user.getId();
   }
 
   public Long loginUser(String username, String password) {
-    UserEntity userEntity = userMapper.findByUsername(username)
+    User user = userMapper.findByUsername(username)
         .orElseThrow(() -> {
           throw new IllegalArgumentException("존재하지 않는 username");
         });
 
-    if (!userEntity.getPassword().equals(password)) {
+    if (!user.getPassword().equals(password)) {
       throw new IllegalArgumentException("일치하지 않는 password");
     }
 
-    return userEntity.getId();
+    return user.getId();
   }
 
-  public UserEntity findUser(Long id) {
+  public User findUser(Long id) {
     return userMapper.findById(id)
         .orElseThrow(() -> {
           throw new IllegalArgumentException("존재하지 않는 유저 id 입니다.");

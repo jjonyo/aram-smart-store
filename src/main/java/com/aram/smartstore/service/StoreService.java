@@ -1,6 +1,6 @@
 package com.aram.smartstore.service;
 
-import com.aram.smartstore.domain.StoreEntity;
+import com.aram.smartstore.domain.Store;
 import com.aram.smartstore.mapper.StoreMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class StoreService {
   private final CategoryService categoryService;
   private final StoreMapper storeMapper;
 
-  public StoreEntity findStore(Long id) {
+  public Store findStore(Long id) {
     return storeMapper.findById(id)
         .orElseThrow(() -> {
           throw new IllegalArgumentException("존재하지 않는 스토어 id 입니다.");
@@ -28,27 +28,27 @@ public class StoreService {
     userService.findUser(userId);
 
     //스토어 생성
-    StoreEntity storeEntity = createStore(userId, name, description);
+    Store store = createStore(userId, name, description);
 
     //스토어 멤버 추가
-    storeMemberService.saveStoreMember(userId, storeEntity.getId(), "MANAGER");
+    storeMemberService.saveStoreMember(userId, store.getId(), "MANAGER");
 
     //ROOT카테고리 추가
-    categoryService.saveRootCategory(userId, storeEntity.getId());
+    categoryService.saveRootCategory(userId, store.getId());
 
-    return storeEntity.getId();
+    return store.getId();
   }
 
-  private StoreEntity createStore(Long userId, String name, String description) {
-    StoreEntity storeEntity = StoreEntity.builder()
+  private Store createStore(Long userId, String name, String description) {
+    Store store = Store.builder()
         .name(name)
         .description(description)
         .state("CLOSE")
         .build();
-    storeEntity.setCreatorId(userId.toString());
-    storeEntity.setModifierId(userId.toString());
-    storeMapper.insert(storeEntity);
+    store.setCreatorId(userId.toString());
+    store.setModifierId(userId.toString());
+    storeMapper.insert(store);
 
-    return storeEntity;
+    return store;
   }
 }

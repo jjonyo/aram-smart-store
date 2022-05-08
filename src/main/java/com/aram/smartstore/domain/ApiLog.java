@@ -1,6 +1,6 @@
 package com.aram.smartstore.domain;
 
-import com.aram.smartstore.domain.shared.BaseEntity;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class StoreMemberEntity extends BaseEntity {
+public class ApiLog {
 
-  private Long id;
+  private Long sequence;
   private Long storeId;
-  private Long userId;
-  private String type;
+  private String fullPath;
+  private String domain;
+  private String path;
+  private String requestParam;
+  private String responseParam;
+  private String responseCode;
+  private String creatorId;
+  private LocalDateTime createdAt;
 }

@@ -3,41 +3,41 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aram.smartstore.mapper.CategoryMapper">
 
-  <insert id="insert" parameterType="CategoryEntity" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="Category" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO category (parent_id, store_id, name, level, use_yn, creator_id, modifier_id,
-                          created_at, modified_at)
+    created_at, modified_at)
     VALUES (#{parentId}, #{storeId}, #{name}, #{level}, #{useYn}, #{creatorId}, #{modifierId},
-            NOW(), NOW())
+    NOW(), NOW())
   </insert>
 
-  <select id="findById" resultType="CategoryEntity">
+  <select id="findById" resultType="Category">
     SELECT *
     FROM category
     WHERE id = #{id}
   </select>
 
-  <select id="findChildCategoriesById" resultType="CategoryEntity">
+  <select id="findChildCategoriesById" resultType="Category">
     SELECT *
     FROM category
     WHERE parent_id = #{id}
-      AND use_yn = 'Y'
+    AND use_yn = 'Y'
   </select>
 
-  <update id="update" parameterType="CategoryEntity">
+  <update id="update" parameterType="Category">
     UPDATE category
-    SET parent_id   = #{parentId},
-        store_id    = #{storeId},
-        name        = #{name},
-        level       = #{level},
-        use_yn      = #{useYn},
-        creator_id  = #{creatorId},
-        modifier_id = #{modifierId},
-        created_at  = #{createdAt},
-        modified_at = NOW()
+    SET parent_id = #{parentId},
+    store_id = #{storeId},
+    name = #{name},
+    level = #{level},
+    use_yn = #{useYn},
+    creator_id = #{creatorId},
+    modifier_id = #{modifierId},
+    created_at = #{createdAt},
+    modified_at = NOW()
     WHERE id = #{id}
   </update>
 
-  <select id="findProductsByCategories" parameterType="List" resultType="ProductEntity">
+  <select id="findProductsByCategories" parameterType="List" resultType="Product">
     SELECT *
     FROM product
     WHERE category_id IN

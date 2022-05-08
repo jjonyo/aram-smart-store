@@ -1,6 +1,6 @@
 package com.aram.smartstore.controller.dto.request;
 
-import com.aram.smartstore.domain.UserEntity;
+import com.aram.smartstore.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +16,8 @@ public class SaveUserRequestDto {
   private String address;
   private String phoneNumber;
 
-  public UserEntity toEntity() {
-    return UserEntity.builder()
+  public User toUser() {
+    return User.builder()
         .username(getUsername())
         .password(getPassword())
         .name(getName())

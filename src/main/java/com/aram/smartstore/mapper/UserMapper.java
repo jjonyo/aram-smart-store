@@ -1,15 +1,15 @@
 package com.aram.smartstore.mapper;
 
-import com.aram.smartstore.domain.UserEntity;
+import com.aram.smartstore.domain.User;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserMapper {
 
-  void insert(UserEntity userEntity);
+  void insert(User user);
 
-  Optional<UserEntity> findByUsername(String username);
+  Optional<User> findByUsername(String username);
 
-  Optional<UserEntity> findById(Long id);
+  Optional<User> findById(Long id);
 }

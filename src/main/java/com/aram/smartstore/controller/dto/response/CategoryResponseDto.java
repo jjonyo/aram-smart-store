@@ -1,6 +1,6 @@
 package com.aram.smartstore.controller.dto.response;
 
-import com.aram.smartstore.domain.CategoryEntity;
+import com.aram.smartstore.domain.Category;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +22,7 @@ public class CategoryResponseDto {
   private final LocalDateTime createdAt;
   private final LocalDateTime modifiedAt;
 
-  public static CategoryResponseDto of(CategoryEntity category) {
+  public static CategoryResponseDto of(Category category) {
 
     return CategoryResponseDto.builder()
         .id(category.getId())

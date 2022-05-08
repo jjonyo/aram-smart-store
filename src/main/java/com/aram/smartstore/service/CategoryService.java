@@ -3,8 +3,8 @@ package com.aram.smartstore.service;
 import com.aram.smartstore.controller.dto.request.UpdateCategoryRequestDto;
 import com.aram.smartstore.controller.dto.response.CategoryResponseDto;
 import com.aram.smartstore.controller.dto.response.ProductResponseDto;
-import com.aram.smartstore.domain.CategoryEntity;
-import com.aram.smartstore.domain.ProductEntity;
+import com.aram.smartstore.domain.Category;
+import com.aram.smartstore.domain.Product;
 import com.aram.smartstore.mapper.CategoryMapper;
 import com.aram.smartstore.mapper.StoreMapper;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class CategoryService {
   private final StoreMemberService storeMemberService;
 
   public CategoryResponseDto findCategories(Long id) {
-    CategoryEntity categories = categoryMapper.findById(id)
+    Category categories = categoryMapper.findById(id)
         .orElseThrow(() -> {
           throw new IllegalArgumentException("존재하지 않는 카테고리 id 입니다.");
         });
@@ -32,14 +32,14 @@ public class CategoryService {
   }
 
   public List<CategoryResponseDto> findChildCategories(Long id) {
-    List<CategoryEntity> categoriesList = categoryMapper.findChildCategoriesById(id);
+    List<Category> categoriesList = categoryMapper.findChildCategoriesById(id);
 
     return categoriesList.stream()
         .map(CategoryResponseDto::of)
         .collect(Collectors.toList());
   }
 
-  public CategoryEntity findCategoryEntity(Long id) {
+  public Category findCategory(Long id) {
     return categoryMapper.findById(id)
         .orElseThrow(() -> {
           throw new IllegalArgumentException("존재하지 않는 카테고리 id 입니다.");
@@ -60,9 +60,9 @@ public class CategoryService {
     storeMemberService.findStoreMember(storeId, userId);
 
     //카테고리 조회
-    CategoryEntity parentCategory = findCategoryEntity(parentId);
+    Category parentCategory = findCategory(parentId);
 
-    CategoryEntity category = CategoryEntity.builder()
+    Category category = Category.builder()
         .name(name)
         .storeId(storeId)
         .parentId(parentId)
@@ -77,45 +77,45 @@ public class CategoryService {
   }
 
   public Long saveRootCategory(Long userId, Long storeId) {
-    CategoryEntity categoryEntity = CategoryEntity.builder()
+    Category category = Category.builder()
         .storeId(storeId)
         .name("ROOT")
         .level(0)
         .useYn("Y")
         .build();
-    categoryEntity.setCreatorId(userId.toString());
-    categoryEntity.setModifierId(userId.toString());
-    categoryMapper.insert(categoryEntity);
+    category.setCreatorId(userId.toString());
+    category.setModifierId(userId.toString());
+    categoryMapper.insert(category);
 
-    return categoryEntity.getId();
+    return category.getId();
   }
 
   public Long updateCategory(Long categoryId, Long userId,
       UpdateCategoryRequestDto updateCategoryRequestDto) {
     //카테고리 조회
-    CategoryEntity categoryEntity = findCategoryEntity(categoryId);
+    Category category = findCategory(categoryId);
 
     //스토어멤버 조회
-    Long storeId = categoryEntity.getStoreId();
+    Long storeId = category.getStoreId();
     storeMemberService.findStoreMember(storeId, userId);
 
     //변경값 세팅
     if (updateCategoryRequestDto.getName() != null) {
-      categoryEntity.updateName(updateCategoryRequestDto.getName());
+      category.updateName(updateCategoryRequestDto.getName());
     }
 
-    categoryEntity.setModifierId(userId.toString());
-    categoryMapper.update(categoryEntity);
+    category.setModifierId(userId.toString());
+    categoryMapper.update(category);
 
-    return categoryEntity.getId();
+    return category.getId();
   }
 
   public Long deleteCategory(Long categoryId, Long userId) {
     //카테고리 조회
-    CategoryEntity categoryEntity = findCategoryEntity(categoryId);
+    Category category = findCategory(categoryId);
 
     //스토어멤버 조회
-    Long storeId = categoryEntity.getStoreId();
+    Long storeId = category.getStoreId();
     storeMemberService.findStoreMember(storeId, userId);
 
     //하위카테고리 조회
@@ -125,12 +125,12 @@ public class CategoryService {
     }
 
     //카테고리 삭제
-    categoryEntity.updateUseYn("N");
+    category.updateUseYn("N");
 
-    categoryEntity.setModifierId(userId.toString());
-    categoryMapper.update(categoryEntity);
+    category.setModifierId(userId.toString());
+    categoryMapper.update(category);
 
-    return categoryEntity.getId();
+    return category.getId();
   }
 
   public List<ProductResponseDto> findProductsByCategories(Long categoryId) {
@@ -139,7 +139,7 @@ public class CategoryService {
     categoryIdList.add(categoryId);
     getChildCategoryId(categoryId, categoryIdList);
 
-    List<ProductEntity> productsByCategories = categoryMapper.findProductsByCategories(
+    List<Product> productsByCategories = categoryMapper.findProductsByCategories(
         categoryIdList);
 
     return productsByCategories.stream()
@@ -150,7 +150,7 @@ public class CategoryService {
   private void getChildCategoryId(Long categoryId, List<Long> categoryIdList) {
     List<Long> childCategoryIdList = categoryMapper.findChildCategoriesById(categoryId)
         .stream()
-        .map(CategoryEntity::getId)
+        .map(Category::getId)
         .collect(Collectors.toList());
 
     categoryIdList.addAll(childCategoryIdList);

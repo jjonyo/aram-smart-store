@@ -1,21 +1,27 @@
 package com.aram.smartstore.domain;
 
-import com.aram.smartstore.domain.shared.HistoryEntity;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class StoreHistoryEntity extends HistoryEntity {
+public class StoreMember {
 
-  private Long sequence;
+  private Long id;
   private Long storeId;
-  private String name;
-  private String description;
-  private String state;
+  private Long userId;
+  private String type;
+  @Setter
+  private String creatorId;
+  @Setter
+  private String modifierId;
+  private LocalDateTime createdAt;
+  private LocalDateTime modifiedAt;
 }

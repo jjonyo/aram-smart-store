@@ -19,7 +19,7 @@ public class StoreController {
   @PostMapping("/store")
   public ResponseEntity<Long> createStore(@RequestBody SaveStoreRequestDto saveStoreRequestDto,
       @CookieValue("login-token") Long userId) {
-    
+
     Long storeId = storeService.saveStore(userId, saveStoreRequestDto.getName(),
         saveStoreRequestDto.getDescription());
 

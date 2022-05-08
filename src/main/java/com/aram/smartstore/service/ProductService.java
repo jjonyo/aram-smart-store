@@ -1,8 +1,8 @@
 package com.aram.smartstore.service;
 
 import com.aram.smartstore.controller.dto.request.SaveProductRequestDto;
-import com.aram.smartstore.domain.CategoryEntity;
-import com.aram.smartstore.domain.ProductEntity;
+import com.aram.smartstore.domain.Category;
+import com.aram.smartstore.domain.Product;
 import com.aram.smartstore.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,19 +21,19 @@ public class ProductService {
     userService.findUser(userId);
 
     //카테고리 조회
-    CategoryEntity categoryEntity = categoryService.findCategoryEntity(
+    Category category = categoryService.findCategory(
         saveProductRequestDto.getCategoryId());
 
-    if (categoryEntity.getLevel() < 3) {
+    if (category.getLevel() < 3) {
       throw new IllegalArgumentException("소분류, 세부분류 카테고리에만 상품 등록이 가능합니다.");
     }
 
     //스토어 멤버 조회
-    Long storeId = categoryEntity.getStoreId();
+    Long storeId = category.getStoreId();
     storeMemberService.findStoreMember(storeId, userId);
 
     //상품 엔티티 생성
-    ProductEntity productEntity = ProductEntity.builder()
+    Product product = Product.builder()
         .name(saveProductRequestDto.getName())
         .categoryId(saveProductRequestDto.getCategoryId())
         .description(saveProductRequestDto.getDescription())
@@ -41,11 +41,11 @@ public class ProductService {
         .quantity(saveProductRequestDto.getQuantity())
         .deleteYn("N")
         .build();
-    productEntity.setCreatorId(userId.toString());
-    productEntity.setModifierId(userId.toString());
+    product.setCreatorId(userId.toString());
+    product.setModifierId(userId.toString());
 
-    productMapper.insert(productEntity);
+    productMapper.insert(product);
 
-    return productEntity.getId();
+    return product.getId();
   }
 }

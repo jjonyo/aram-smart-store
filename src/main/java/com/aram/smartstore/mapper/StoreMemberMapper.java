@@ -1,13 +1,13 @@
 package com.aram.smartstore.mapper;
 
-import com.aram.smartstore.domain.StoreMemberEntity;
+import com.aram.smartstore.domain.StoreMember;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Param;
 
 public interface StoreMemberMapper {
 
-  void insert(StoreMemberEntity storeMemberEntity);
+  void insert(StoreMember storeMember);
 
-  Optional<StoreMemberEntity> findStoreMember(@Param("storeId") Long storeId,
+  Optional<StoreMember> findStoreMember(@Param("storeId") Long storeId,
       @Param("userId") Long userId);
 }
