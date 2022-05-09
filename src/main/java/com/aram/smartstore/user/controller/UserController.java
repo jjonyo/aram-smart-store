@@ -1,10 +1,11 @@
 package com.aram.smartstore.user.controller;
 
+import static com.aram.smartstore.global.constants.SessionConstants.LOGIN_SESSION_NAME;
+
 import com.aram.smartstore.user.controller.dto.LoginUserRequestDto;
 import com.aram.smartstore.user.controller.dto.SaveUserRequestDto;
 import com.aram.smartstore.user.service.UserService;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
-  private static final String LOGIN_TOKEN_NAME = "login-token";
-  private static final String LOGIN_SUCCESS_MESSAGE = "Login Success";
+  private static final String LOGIN_SUCCESS_MESSAGE = "로그인 성공";
 
   @PostMapping("/auth/signup")
   public ResponseEntity<Long> signUp(@RequestBody SaveUserRequestDto saveUserRequestDto) {
@@ -29,13 +29,11 @@ public class UserController {
 
   @PostMapping("/auth/login")
   public ResponseEntity<?> login(@RequestBody LoginUserRequestDto loginUserRequestDto,
-      HttpServletResponse response) {
+      HttpSession httpSession) {
     Long userId = userService.loginUser(loginUserRequestDto.getUsername(),
         loginUserRequestDto.getPassword());
 
-    Cookie cookie = new Cookie(LOGIN_TOKEN_NAME, userId.toString());
-    cookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
-    response.addCookie(cookie);
+    httpSession.setAttribute(LOGIN_SESSION_NAME, userId);
 
     return new ResponseEntity<>(LOGIN_SUCCESS_MESSAGE, HttpStatus.OK);
   }
