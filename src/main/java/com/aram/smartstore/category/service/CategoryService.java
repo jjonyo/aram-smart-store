@@ -1,14 +1,13 @@
 package com.aram.smartstore.category.service;
 
-import com.aram.smartstore.category.controller.dto.UpdateCategoryRequestDto;
 import com.aram.smartstore.category.controller.dto.CategoryResponseDto;
-import com.aram.smartstore.product.controller.dto.ProductResponseDto;
+import com.aram.smartstore.category.controller.dto.UpdateCategoryRequestDto;
 import com.aram.smartstore.category.domain.Category;
-import com.aram.smartstore.product.domain.Product;
 import com.aram.smartstore.category.mapper.CategoryMapper;
+import com.aram.smartstore.product.controller.dto.ProductResponseDto;
+import com.aram.smartstore.product.domain.Product;
 import com.aram.smartstore.store.mapper.StoreMapper;
-import com.aram.smartstore.store.domain.service.StoreMemberService;
-import com.aram.smartstore.user.service.UserService;
+import com.aram.smartstore.store.mapper.StoreMemberMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,13 +20,18 @@ public class CategoryService {
 
   private final CategoryMapper categoryMapper;
   private final StoreMapper storeMapper;
-  private final UserService userService;
-  private final StoreMemberService storeMemberService;
+  private final StoreMemberMapper storeMemberMapper;
+
+  public static final String INVALID_CATEGORY_ID = "존재하지 않는 카테고리 아이디 입니다.";
+  public static final String INVALID_STORE_ID = "존재하지 않는 스토어 아이디 입니다.";
+  public static final String INVALID_STORE_MEMBER = "존재하지 않는 스토어 멤버입니다.";
+  public static final String INVALID_PARENT_CATEGORY_ID = "존재하지 않는 부모 카테고리 아이디 입니다.";
+  public static final String MISMATCH_STORE_ID = "다른 스토어의 카테고리에 새로운 카테고리를 생성할 수 없습니다.";
 
   public CategoryResponseDto findCategories(Long id) {
     Category categories = categoryMapper.findById(id)
         .orElseThrow(() -> {
-          throw new IllegalArgumentException("존재하지 않는 카테고리 id 입니다.");
+          throw new IllegalArgumentException(INVALID_CATEGORY_ID);
         });
 
     return CategoryResponseDto.of(categories);
@@ -41,65 +45,71 @@ public class CategoryService {
         .collect(Collectors.toList());
   }
 
-  public Category findCategory(Long id) {
-    return categoryMapper.findById(id)
-        .orElseThrow(() -> {
-          throw new IllegalArgumentException("존재하지 않는 카테고리 id 입니다.");
-        });
-  }
-
   public Long saveCategory(Long userId, Long parentId, Long storeId, String name) {
-    //유저 조회
-    userService.findUser(userId);
-
     //스토어 조회
-    storeMapper.findById(storeId)
-        .orElseThrow(() -> {
-          throw new IllegalArgumentException("존재하지 않는 스토어 id 입니다.");
-        });
+    validateStore(storeId);
 
     //스토어 멤버 조회
-    storeMemberService.findStoreMember(storeId, userId);
+    validateStoreMember(userId, storeId);
 
-    //카테고리 조회
-    Category parentCategory = findCategory(parentId);
+    //부모 카테고리 조회
+    Category parentCategory = getParentCategory(parentId);
+    if (!parentCategory.getStoreId().equals(storeId)) {
+      throw new IllegalArgumentException(MISMATCH_STORE_ID);
+    }
 
+    //카테고리 생성
+    Category category = createCategory(userId, parentId, storeId, name,
+        parentCategory.getLevel());
+
+    return category.getId();
+  }
+
+  private Category createCategory(Long userId, Long parentId, Long storeId, String name,
+      Integer parentCategoryLevel) {
     Category category = Category.builder()
         .name(name)
         .storeId(storeId)
         .parentId(parentId)
-        .level(parentCategory.getLevel() + 1)
+        .level(parentCategoryLevel + 1)
         .useYn("Y")
+        .creatorId(userId.toString())
+        .modifierId(userId.toString())
         .build();
-    category.setCreatorId(userId.toString());
-    category.setModifierId(userId.toString());
-    categoryMapper.insert(category);
 
-    return category.getId();
+    categoryMapper.insert(category);
+    return category;
   }
 
-  public Long saveRootCategory(Long userId, Long storeId) {
-    Category category = Category.builder()
-        .storeId(storeId)
-        .name("ROOT")
-        .level(0)
-        .useYn("Y")
-        .build();
-    category.setCreatorId(userId.toString());
-    category.setModifierId(userId.toString());
-    categoryMapper.insert(category);
+  private Category getParentCategory(Long parentId) {
+    return categoryMapper.findById(parentId)
+        .orElseThrow(() -> {
+          throw new IllegalArgumentException(INVALID_PARENT_CATEGORY_ID);
+        });
+  }
 
-    return category.getId();
+  private void validateStore(Long storeId) {
+    storeMapper.findById(storeId)
+        .orElseThrow(() -> {
+          throw new IllegalArgumentException(INVALID_STORE_ID);
+        });
+  }
+
+  private void validateStoreMember(Long userId, Long storeId) {
+    storeMemberMapper.findStoreMember(storeId, userId)
+        .orElseThrow(() -> {
+          throw new IllegalArgumentException(INVALID_STORE_MEMBER);
+        });
   }
 
   public Long updateCategory(Long categoryId, Long userId,
       UpdateCategoryRequestDto updateCategoryRequestDto) {
     //카테고리 조회
-    Category category = findCategory(categoryId);
+    Category category = getCategory(categoryId);
 
     //스토어멤버 조회
     Long storeId = category.getStoreId();
-    storeMemberService.findStoreMember(storeId, userId);
+    validateStoreMember(userId, storeId);
 
     //변경값 세팅
     if (updateCategoryRequestDto.getName() != null) {
@@ -112,14 +122,22 @@ public class CategoryService {
     return category.getId();
   }
 
+  private Category getCategory(Long categoryId) {
+    return categoryMapper.findById(categoryId)
+        .orElseThrow(() -> {
+          throw new IllegalArgumentException(INVALID_CATEGORY_ID);
+        });
+  }
+
   public Long deleteCategory(Long categoryId, Long userId) {
     //카테고리 조회
-    Category category = findCategory(categoryId);
+    Category category = getCategory(categoryId);
 
     //스토어멤버 조회
     Long storeId = category.getStoreId();
-    storeMemberService.findStoreMember(storeId, userId);
+    validateStoreMember(userId, storeId);
 
+    //TODO :: 리팩토링
     //하위카테고리 조회
     List<CategoryResponseDto> childCategories = findChildCategories(categoryId);
     if (!childCategories.isEmpty()) {

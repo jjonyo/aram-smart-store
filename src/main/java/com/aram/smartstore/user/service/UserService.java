@@ -12,12 +12,18 @@ public class UserService {
 
   private final UserMapper userMapper;
 
+  public static final String USER_DEFAULT_STATE = "NORMAL";
+  public static final String USER_DEFAULT_CREATOR = "SYSTEM";
+  public static final String USER_DEFAULT_MODIFIER = "SYSTEM";
+  public static final String INVALID_USERNAME = "존재하지 않는 유저네임 입니다.";
+  public static final String INVALID_PASSWORD = "일치하지 않는 패스워드 입니다.";
+
   public Long saveUser(SaveUserRequestDto saveUserRequestDto) {
     User user = saveUserRequestDto.toUser();
 
-    user.setState("NORMAL");
-    user.setCreatorId("SYSTEM");
-    user.setModifierId("SYSTEM");
+    user.setState(USER_DEFAULT_STATE);
+    user.setCreatorId(USER_DEFAULT_CREATOR);
+    user.setModifierId(USER_DEFAULT_MODIFIER);
 
     userMapper.insert(user);
     return user.getId();
@@ -26,11 +32,11 @@ public class UserService {
   public Long loginUser(String username, String password) {
     User user = userMapper.findByUsername(username)
         .orElseThrow(() -> {
-          throw new IllegalArgumentException("존재하지 않는 username");
+          throw new IllegalArgumentException(INVALID_USERNAME);
         });
 
     if (!user.getPassword().equals(password)) {
-      throw new IllegalArgumentException("일치하지 않는 password");
+      throw new IllegalArgumentException(INVALID_PASSWORD);
     }
 
     return user.getId();
@@ -39,7 +45,7 @@ public class UserService {
   public User findUser(Long id) {
     return userMapper.findById(id)
         .orElseThrow(() -> {
-          throw new IllegalArgumentException("존재하지 않는 유저 id 입니다.");
+          throw new IllegalArgumentException(INVALID_USERNAME);
         });
   }
 }
