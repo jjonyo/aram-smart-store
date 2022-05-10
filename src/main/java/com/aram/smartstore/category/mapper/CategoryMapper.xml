@@ -5,9 +5,9 @@
 
   <insert id="insert" parameterType="Category" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO category (parent_id, store_id, name, level, use_yn, creator_id, modifier_id,
-    created_at, modified_at)
+                          created_at, modified_at)
     VALUES (#{parentId}, #{storeId}, #{name}, #{level}, #{useYn}, #{creatorId}, #{modifierId},
-    NOW(), NOW())
+            NOW(), NOW())
   </insert>
 
   <select id="findById" resultType="Category">
@@ -20,21 +20,19 @@
     SELECT *
     FROM category
     WHERE parent_id = #{id}
-    AND use_yn = 'Y'
+      AND use_yn = 'Y'
   </select>
 
-  <update id="update" parameterType="Category">
+  <update id="update" parameterType="Map">
     UPDATE category
-    SET parent_id = #{parentId},
-    store_id = #{storeId},
-    name = #{name},
-    level = #{level},
-    use_yn = #{useYn},
-    creator_id = #{creatorId},
-    modifier_id = #{modifierId},
-    created_at = #{createdAt},
-    modified_at = NOW()
-    WHERE id = #{id}
+    SET parent_id   = #{category.parentId},
+        store_id    = #{category.storeId},
+        name        = #{category.name},
+        level       = #{category.level},
+        use_yn      = #{category.useYn},
+        modifier_id = #{modifierId},
+        modified_at = NOW()
+    WHERE id = #{category.id}
   </update>
 
   <select id="findProductsByCategories" parameterType="List" resultType="Product">

@@ -56,7 +56,7 @@ public class CategoryController {
 
   @PatchMapping("/category/{id}")
   public ResponseEntity<Long> updateCategory(@PathVariable("id") Long categoryId,
-      @CookieValue("login-token") Long userId,
+      @RequestAttribute(LOGIN_ID) Long userId,
       @RequestBody UpdateCategoryRequestDto updateCategoryRequestDto) {
 
     Long updatedId = categoryService.updateCategory(categoryId, userId, updateCategoryRequestDto);

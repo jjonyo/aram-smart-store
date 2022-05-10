@@ -116,8 +116,7 @@ public class CategoryService {
       category.updateName(updateCategoryRequestDto.getName());
     }
 
-    category.setModifierId(userId.toString());
-    categoryMapper.update(category);
+    categoryMapper.update(category, userId.toString());
 
     return category.getId();
   }
@@ -147,8 +146,7 @@ public class CategoryService {
     //카테고리 삭제
     category.updateUseYn("N");
 
-    category.setModifierId(userId.toString());
-    categoryMapper.update(category);
+    categoryMapper.update(category, userId.toString());
 
     return category.getId();
   }

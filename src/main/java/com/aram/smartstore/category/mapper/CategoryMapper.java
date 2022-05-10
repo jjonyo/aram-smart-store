@@ -5,6 +5,7 @@ import com.aram.smartstore.product.domain.Product;
 import java.util.List;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface CategoryMapper {
@@ -15,7 +16,7 @@ public interface CategoryMapper {
 
   List<Category> findChildCategoriesById(Long id);
 
-  void update(Category category);
+  void update(@Param("category") Category category, @Param(("modifierId")) String modifierId);
 
   List<Product> findProductsByCategories(List<Long> categoryIdList);
 }
