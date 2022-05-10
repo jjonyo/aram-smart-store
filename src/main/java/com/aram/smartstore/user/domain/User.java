@@ -22,9 +22,7 @@ public class User {
   private String phoneNumber;
   @Setter
   private String state;
-  @Setter
   private String creatorId;
-  @Setter
   private String modifierId;
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;

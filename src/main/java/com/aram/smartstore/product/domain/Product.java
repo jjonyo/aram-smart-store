@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Builder
@@ -21,9 +20,7 @@ public class Product {
   private Integer quantity;
   private String description;
   private String deleteYn;
-  @Setter
   private String creatorId;
-  @Setter
   private String modifierId;
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;

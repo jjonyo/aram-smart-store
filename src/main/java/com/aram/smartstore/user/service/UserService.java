@@ -22,10 +22,8 @@ public class UserService {
     User user = saveUserRequestDto.toUser();
 
     user.setState(USER_DEFAULT_STATE);
-    user.setCreatorId(USER_DEFAULT_CREATOR);
-    user.setModifierId(USER_DEFAULT_MODIFIER);
-
-    userMapper.insert(user);
+    userMapper.insert(user, USER_DEFAULT_CREATOR, USER_DEFAULT_MODIFIER);
+    
     return user.getId();
   }
 

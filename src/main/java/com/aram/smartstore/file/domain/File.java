@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Builder
@@ -22,9 +21,7 @@ public class File {
   private String extension;
   private String fullName;
   private String state;
-  @Setter
   private String creatorId;
-  @Setter
   private String modifierId;
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;

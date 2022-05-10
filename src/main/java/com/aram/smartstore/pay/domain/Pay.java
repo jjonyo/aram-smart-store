@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Builder
@@ -23,9 +22,7 @@ public class Pay {
   private String state;
   private String cancelType;
   private String cancelReason;
-  @Setter
   private String creatorId;
-  @Setter
   private String modifierId;
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;
