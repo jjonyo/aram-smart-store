@@ -41,13 +41,23 @@
     WHERE id = #{category.id}
   </update>
 
-  <select id="findProductsByCategories" parameterType="List" resultType="Product">
+  <select id="findChildCategoriesRecursive" resultType="Category">
+    WITH RECURSIVE category_depth AS
+                     (
+                       SELECT id, parent_id, use_yn
+                       FROM category
+                       WHERE id = #{id}
+                         AND use_yn = 'Y'
+
+                       UNION ALL
+
+                       SELECT c.id, c.parent_id, c.use_yn
+                       FROM category c
+                              INNER JOIN category_depth
+                                         ON c.parent_id = category_depth.id AND c.use_yn = 'Y'
+                     )
     SELECT *
-    FROM product
-    WHERE category_id IN
-    <foreach collection="list" item="item" open="(" close=")" separator=",">
-      #{item}
-    </foreach>
+    FROM category_depth;
   </select>
 
 </mapper>

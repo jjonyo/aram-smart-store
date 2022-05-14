@@ -4,11 +4,8 @@ import com.aram.smartstore.category.controller.dto.CategoryResponseDto;
 import com.aram.smartstore.category.controller.dto.UpdateCategoryRequestDto;
 import com.aram.smartstore.category.domain.Category;
 import com.aram.smartstore.category.mapper.CategoryMapper;
-import com.aram.smartstore.product.controller.dto.ProductResponseDto;
-import com.aram.smartstore.product.domain.Product;
 import com.aram.smartstore.store.mapper.StoreMapper;
 import com.aram.smartstore.store.mapper.StoreMemberMapper;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +24,7 @@ public class CategoryService {
   public static final String INVALID_STORE_MEMBER = "존재하지 않는 스토어 멤버입니다.";
   public static final String INVALID_PARENT_CATEGORY_ID = "존재하지 않는 부모 카테고리 아이디 입니다.";
   public static final String MISMATCH_STORE_ID = "다른 스토어의 카테고리에 새로운 카테고리를 생성할 수 없습니다.";
+  public static final String UNABLE_TO_DELETE_ERROR = "하위 카테고리가 존재하기때문에 삭제할 수 없습니다.";
 
   public CategoryResponseDto findCategories(Long id) {
     Category categories = categoryMapper.findById(id)
@@ -119,7 +117,7 @@ public class CategoryService {
 
     categoryMapper.update(category, userId.toString());
     categoryMapper.insertHistory(category);
-    
+
     return category.getId();
   }
 
@@ -142,7 +140,7 @@ public class CategoryService {
     //하위카테고리 조회
     List<CategoryResponseDto> childCategories = findChildCategories(categoryId);
     if (!childCategories.isEmpty()) {
-      throw new IllegalArgumentException("하위 카테고리가 존재하기때문에 삭제할 수 없습니다.");
+      throw new IllegalArgumentException(UNABLE_TO_DELETE_ERROR);
     }
 
     //카테고리 삭제
@@ -151,32 +149,5 @@ public class CategoryService {
     categoryMapper.update(category, userId.toString());
 
     return category.getId();
-  }
-
-  public List<ProductResponseDto> findProductsByCategories(Long categoryId) {
-    //모든 하위 카테고리 id 가져오기
-    List<Long> categoryIdList = new ArrayList<>();
-    categoryIdList.add(categoryId);
-    getChildCategoryId(categoryId, categoryIdList);
-
-    List<Product> productsByCategories = categoryMapper.findProductsByCategories(
-        categoryIdList);
-
-    return productsByCategories.stream()
-        .map(ProductResponseDto::of)
-        .collect(Collectors.toList());
-  }
-
-  private void getChildCategoryId(Long categoryId, List<Long> categoryIdList) {
-    List<Long> childCategoryIdList = categoryMapper.findChildCategoriesById(categoryId)
-        .stream()
-        .map(Category::getId)
-        .collect(Collectors.toList());
-
-    categoryIdList.addAll(childCategoryIdList);
-
-    for (Long id : childCategoryIdList) {
-      getChildCategoryId(id, categoryIdList);
-    }
   }
 }

@@ -2,10 +2,13 @@ package com.aram.smartstore.product.service;
 
 import com.aram.smartstore.category.domain.Category;
 import com.aram.smartstore.category.mapper.CategoryMapper;
+import com.aram.smartstore.product.controller.dto.ProductResponseDto;
 import com.aram.smartstore.product.controller.dto.SaveProductRequestDto;
 import com.aram.smartstore.product.domain.Product;
 import com.aram.smartstore.product.mapper.ProductMapper;
 import com.aram.smartstore.store.mapper.StoreMemberMapper;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -73,4 +76,18 @@ public class ProductService {
     }
     return category;
   }
+
+  public List<ProductResponseDto> findProductsByCategories(Long categoryId) {
+    //모든 하위 카테고리 가져오기
+    List<Category> categoryList = categoryMapper.findChildCategoriesRecursive(categoryId);
+
+    //상품 가져오기
+    List<Product> productsByCategories = productMapper.findProductsByCategories(
+        categoryList);
+
+    return productsByCategories.stream()
+        .map(ProductResponseDto::of)
+        .collect(Collectors.toList());
+  }
+
 }

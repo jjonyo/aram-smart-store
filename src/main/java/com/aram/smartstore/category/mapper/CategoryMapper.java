@@ -20,5 +20,5 @@ public interface CategoryMapper {
 
   void update(@Param("category") Category category, @Param("modifierId") String modifierId);
 
-  List<Product> findProductsByCategories(List<Long> categoryIdList);
+  List<Category> findChildCategoriesRecursive(Long id);
 }

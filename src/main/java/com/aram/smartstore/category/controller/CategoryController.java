@@ -2,17 +2,14 @@ package com.aram.smartstore.category.controller;
 
 import static com.aram.smartstore.global.constants.SessionConstants.LOGIN_ID;
 
+import com.aram.smartstore.category.controller.dto.CategoryResponseDto;
 import com.aram.smartstore.category.controller.dto.SaveCategoryRequestDto;
 import com.aram.smartstore.category.controller.dto.UpdateCategoryRequestDto;
-import com.aram.smartstore.category.controller.dto.CategoryResponseDto;
-import com.aram.smartstore.global.constants.SessionConstants;
-import com.aram.smartstore.product.controller.dto.ProductResponseDto;
 import com.aram.smartstore.category.service.CategoryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -71,14 +68,5 @@ public class CategoryController {
     Long deletedId = categoryService.deleteCategory(categoryId, userId);
 
     return new ResponseEntity<>(deletedId, HttpStatus.OK);
-  }
-
-  @GetMapping("/categories/{id}/products")
-  public ResponseEntity<List<ProductResponseDto>> getProductsByCategories(
-      @PathVariable("id") Long categoryId) {
-    List<ProductResponseDto> products = categoryService.findProductsByCategories(
-        categoryId);
-
-    return new ResponseEntity<>(products, HttpStatus.OK);
   }
 }
