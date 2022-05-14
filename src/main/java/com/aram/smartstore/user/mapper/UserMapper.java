@@ -11,6 +11,8 @@ public interface UserMapper {
   void insert(@Param("user") User user, @Param("creatorId") String creatorId,
       @Param("modifierId") String modifierId);
 
+  void insertHistory(@Param("user") User user, @Param("creatorId") String creatorId);
+
   Optional<User> findByUsername(String username);
 
   Optional<User> findById(Long id);

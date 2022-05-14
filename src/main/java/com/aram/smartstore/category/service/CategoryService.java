@@ -78,6 +78,7 @@ public class CategoryService {
         .build();
 
     categoryMapper.insert(category);
+    categoryMapper.insertHistory(category);
     return category;
   }
 
@@ -117,7 +118,8 @@ public class CategoryService {
     }
 
     categoryMapper.update(category, userId.toString());
-
+    categoryMapper.insertHistory(category);
+    
     return category.getId();
   }
 

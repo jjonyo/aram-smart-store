@@ -5,9 +5,16 @@
 
   <insert id="insert" parameterType="Product" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO product (name, category_id, price, quantity, description, delete_yn, creator_id,
-    modifier_id, created_at, modified_at)
+                         modifier_id, created_at, modified_at)
     VALUES (#{name}, #{categoryId}, #{price}, #{quantity}, #{description}, #{deleteYn},
-    #{creatorId}, #{modifierId}, NOW(), NOW())
+            #{creatorId}, #{modifierId}, NOW(), NOW())
+  </insert>
+
+  <insert id="insertHistory" parameterType="Product" useGeneratedKeys="true">
+    INSERT INTO product_history (product_id, name, category_id, price, quantity, description,
+                                 delete_yn, creator_id, created_at)
+    VALUES (#{id}, #{name}, #{categoryId}, #{price}, #{quantity}, #{description}, #{deleteYn},
+            #{creatorId}, NOW())
   </insert>
 
 </mapper>

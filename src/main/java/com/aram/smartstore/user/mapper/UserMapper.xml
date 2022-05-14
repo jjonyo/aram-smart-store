@@ -10,6 +10,13 @@
             #{user.phoneNumber}, #{user.state}, #{creatorId}, #{modifierId}, NOW(), NOW())
   </insert>
 
+  <insert id="insertHistory" parameterType="Map" useGeneratedKeys="true">
+    INSERT INTO user_history (user_id, username, password, name, address, phone_number, state,
+                              creator_id, created_at)
+    VALUES (#{user.id}, #{user.username}, #{user.password}, #{user.name}, #{user.address},
+            #{user.phoneNumber}, #{user.state}, #{creatorId}, NOW())
+  </insert>
+
   <select id="findByUsername" parameterType="String" resultType="User">
     SELECT *
     FROM user

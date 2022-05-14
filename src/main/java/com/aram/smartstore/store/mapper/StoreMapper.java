@@ -9,5 +9,7 @@ public interface StoreMapper {
 
   void insert(Store store);
 
+  void insertHistory(Store story);
+
   Optional<Store> findById(Long id);
 }

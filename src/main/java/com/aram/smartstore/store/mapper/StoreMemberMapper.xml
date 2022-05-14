@@ -6,14 +6,20 @@
   <insert id="insert" parameterType="StoreMember" useGeneratedKeys="true"
     keyProperty="id">
     INSERT INTO store_member (store_id, user_id, type, creator_id, modifier_id, created_at,
-    modified_at)
+                              modified_at)
     VALUES (#{storeId}, #{userId}, #{type}, #{creatorId}, #{modifierId}, NOW(), NOW())
+  </insert>
+
+  <insert id="insertHistory" parameterType="StoreMember" useGeneratedKeys="true">
+    INSERT INTO store_member_history (store_member_id, store_id, user_id, type, creator_id,
+                                      created_at)
+    VALUES (#{id}, #{storeId}, #{userId}, #{type}, #{creatorId}, NOW())
   </insert>
 
   <select id="findStoreMember" parameterType="Long" resultType="StoreMember">
     SELECT *
     FROM store_member
     WHERE store_id = #{storeId}
-    AND user_id = #{userId}
+      AND user_id = #{userId}
   </select>
 </mapper>

@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ProductMapper {
 
   void insert(Product product);
+
+  void insertHistory(Product product);
 }

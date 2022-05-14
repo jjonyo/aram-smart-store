@@ -8,6 +8,8 @@ public interface StoreMemberMapper {
 
   void insert(StoreMember storeMember);
 
+  void insertHistory(StoreMember storeMember);
+
   Optional<StoreMember> findStoreMember(@Param("storeId") Long storeId,
       @Param("userId") Long userId);
 }

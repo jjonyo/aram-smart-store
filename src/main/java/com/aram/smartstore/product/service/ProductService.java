@@ -51,6 +51,7 @@ public class ProductService {
         .build();
 
     productMapper.insert(product);
+    productMapper.insertHistory(product);
     return product;
   }
 

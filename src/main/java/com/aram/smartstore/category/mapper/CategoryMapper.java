@@ -12,6 +12,8 @@ public interface CategoryMapper {
 
   void insert(Category category);
 
+  void insertHistory(Category category);
+
   Optional<Category> findById(Long id);
 
   List<Category> findChildCategoriesById(Long id);

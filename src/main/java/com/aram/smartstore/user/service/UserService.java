@@ -23,7 +23,8 @@ public class UserService {
 
     user.setState(USER_DEFAULT_STATE);
     userMapper.insert(user, USER_DEFAULT_CREATOR, USER_DEFAULT_MODIFIER);
-    
+    userMapper.insertHistory(user, USER_DEFAULT_CREATOR);
+
     return user.getId();
   }
 

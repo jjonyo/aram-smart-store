@@ -8,6 +8,11 @@
     VALUES (#{name}, #{description}, #{state}, #{creatorId}, #{modifierId}, NOW(), NOW())
   </insert>
 
+  <insert id="insertHistory" parameterType="Store" useGeneratedKeys="true">
+    INSERT INTO store_history (store_id, name, description, state, creator_id, created_at)
+    VALUES (#{id}, #{name}, #{description}, #{state}, #{creatorId}, NOW())
+  </insert>
+
   <select id="findById" resultType="Store">
     SELECT *
     FROM store

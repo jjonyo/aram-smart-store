@@ -10,6 +10,12 @@
             NOW(), NOW())
   </insert>
 
+  <insert id="insertHistory" parameterType="Category" useGeneratedKeys="true">
+    INSERT INTO category_history (category_id, parent_id, store_id, name, level, use_yn, creator_id,
+                                  created_at)
+    VALUES (#{id}, #{parentId}, #{storeId}, #{name}, #{level}, #{useYn}, #{creatorId}, NOW())
+  </insert>
+
   <select id="findById" resultType="Category">
     SELECT *
     FROM category

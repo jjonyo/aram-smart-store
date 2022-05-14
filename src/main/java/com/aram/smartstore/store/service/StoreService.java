@@ -59,6 +59,7 @@ public class StoreService {
         .build();
 
     storeMemberMapper.insert(storeMember);
+    storeMemberMapper.insertHistory(storeMember);
   }
 
   private Long createStore(Long userId, String name, String description) {
@@ -71,7 +72,7 @@ public class StoreService {
         .build();
 
     storeMapper.insert(store);
-
+    storeMapper.insertHistory(store);
     return store.getId();
   }
 }
